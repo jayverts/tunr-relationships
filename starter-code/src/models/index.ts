@@ -1,11 +1,21 @@
 //Connect
 import * as Sequelize from 'sequelize';
 
-var sequelize = new Sequelize('postgres://<username>@localhost:5432/tunr_relationships');
+var sequelize = new Sequelize('postgres://jverdolino@localhost:5432/tunr_relationships');
 
 var Artist = sequelize.import("./artist");
 var Manager = sequelize.import("./manager");
-var Song = sequelize.import("./song")
+var Song = sequelize.import("./song");
+var Ad = sequelize.import('./ad');
+
+Song.belongsTo(Artist);
+Artist.hasMany(Song);
+
+Artist.belongsTo(Manager);
+Manager.hasMany(Artist);
+
+Ad.belongsTo(Manager);
+Manager.hasOne(Ad);
 
 const db = <any>{};
 db.models = {
@@ -13,6 +23,8 @@ db.models = {
 	Manager,
 	Song
 };
+
+
 
 //Export models and Sequelize for seed and dbSetup
 db.Sequelize = Sequelize;
